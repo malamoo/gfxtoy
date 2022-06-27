@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <errno.h>
-#include "err.h"
+#include "errors.h"
 
 static char *name = NULL; // program name for messages
 
@@ -51,6 +51,8 @@ void weprintf(char *fmt, ...)
     va_list args;
 
     fflush(stdout);
+    if (progname() != NULL)
+        fprintf(stderr, "%s: ", progname());
 
     fprintf(stderr, "warning: ");
     va_start(args, fmt);
@@ -60,4 +62,14 @@ void weprintf(char *fmt, ...)
     if (fmt[0] != '\0' && fmt[strlen(fmt) - 1] == ':')
         fprintf(stderr, " %s", strerror(errno));
     fprintf(stderr, "\n");
+}
+
+void *emalloc(size_t n)
+{
+    void *p;
+
+    p = malloc(n);
+    if (p == NULL)
+        eprintf("malloc of %u bytes failed:", n);
+    return p;
 }

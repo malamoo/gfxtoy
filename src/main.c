@@ -1,11 +1,12 @@
+#include "stddef.h"
 #include "gfx.h"
-#include "err.h"
+#include "errors.h"
+#include "game.h"
 
 int main(void)
 {
     setprogname("eemoo");
 
-    gfxinit();
     gameplay();
 
     return 0;
