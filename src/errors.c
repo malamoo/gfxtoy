@@ -50,7 +50,6 @@ void weprintf(char *fmt, ...)
 {
     va_list args;
 
-    fflush(stdout);
     if (progname() != NULL)
         fprintf(stderr, "%s: ", progname());
 

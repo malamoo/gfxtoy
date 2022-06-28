@@ -18,7 +18,7 @@ GLFWwindow *glfwinit()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
-    glfw = glfwCreateWindow(1920, 1080, progname(), NULL, NULL);
+    glfw = glfwCreateWindow(1280, 720, progname(), NULL, NULL);
     if (glfw == NULL)
         eprintf("window creation failed");
 

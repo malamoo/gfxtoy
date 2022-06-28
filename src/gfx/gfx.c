@@ -3,11 +3,13 @@
 #include "shader.h"
 #include "gfx.h"
 
+static GLuint prog;
+static GLuint vao;
+
 void gfxinit(void)
 {
     GLenum err;
     GLuint vs, fs;
-    GLuint prog;
 
     err = glewInit();
     if (GLEW_OK != err)
@@ -26,11 +28,20 @@ void gfxinit(void)
         eprintf("can't create shader program");
     glDeleteShader(vs);
     glDeleteShader(fs);
+
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 }
+
+// TODO: gfxDelete
 
 void gfxrender(void)
 {
     GLfloat red[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 
     glClearBufferfv(GL_COLOR, 0, red);
+
+    glUseProgram(prog);
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 }
