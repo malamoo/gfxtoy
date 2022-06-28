@@ -4,8 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <string.h>
 #include <stdlib.h>
-#include "errors.h"
-#include "types.h"
 #include "platform.h"
 #include "shader.h"
 

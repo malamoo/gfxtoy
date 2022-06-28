@@ -1,5 +1,7 @@
 #include <GL/glew.h>
-#include "errors.h"
+#include <GLFW/glfw3.h>
+#include <stdio.h>
+#include "platform.h"
 #include "shader.h"
 #include "gfx.h"
 

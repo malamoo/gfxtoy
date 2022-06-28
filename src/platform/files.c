@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <stdio.h>
-#include "types.h"
-#include "errors.h"
+#include <GLFW/glfw3.h>
+#include "platform.h"
 
 size_t freads(FILE *fin, char *s, size_t max)
 {

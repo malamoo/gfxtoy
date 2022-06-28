@@ -6,10 +6,9 @@ objs := $(patsubst %.c,$(builddir)/%.o,$(notdir $(srcs)))
 deps := $(objs:%.o=%.d)
 target := $(bindir)/eemoo
 
-VPATH := $(dir $(srcs))
+VPATH := $(sort $(dir $(srcs)))
 CPPFLAGS = -MT $@ -MMD -MP -MF $(@:%.o=%.d)
-CFLAGS := -Wall -Werror -std=c99 \
-		  $(VPATH:%=-I%)
+CFLAGS = -Wall -Werror -std=c99 -Iinclude
 LDLIBS := -lglfw -lGLEW -lGLU -lGL
 
 .PHONY: all

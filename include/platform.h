@@ -1,3 +1,10 @@
+// type aliases
+typedef unsigned char uchar;
+// GLFW
+GLFWwindow *glfwinit();
+// file system
+size_t freads(FILE *fin, char *s, size_t max);
+// error wrapping
 void setprogname(char *str);
 char *progname(void);
 char *estrdup(char *s);

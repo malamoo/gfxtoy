@@ -3,7 +3,8 @@
 #include <string.h>
 #include <stdarg.h>
 #include <errno.h>
-#include "errors.h"
+#include <GLFW/glfw3.h>
+#include "platform.h"
 
 static char *name = NULL; // program name for messages
 

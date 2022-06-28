@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h>
-#include "errors.h"
-#include "types.h"
 #include "platform.h"
 
 static void errcb(int err, const char *desc);
