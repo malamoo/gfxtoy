@@ -11,25 +11,14 @@ static GLuint vao;
 void gfxinit(void)
 {
     GLenum err;
-    GLuint vs, fs;
 
     err = glewInit();
     if (GLEW_OK != err)
         eprintf("GLEW init failed: %s", glewGetErrorString(err));
 
-    vs = glCreateShader(GL_VERTEX_SHADER);
-    fs = glCreateShader(GL_FRAGMENT_SHADER);
-    if (iscomperr(vs, "src/gfx/shader.vert") ||
-        iscomperr(fs, "src/gfx/shader.frag"))
+    prog = buildprog();
+    if (prog == 0)
         eprintf("can't create shader program");
-
-    prog = glCreateProgram();
-    glAttachShader(prog, vs);
-    glAttachShader(prog, fs);
-    if (islinkerr(prog))
-        eprintf("can't create shader program");
-    glDeleteShader(vs);
-    glDeleteShader(fs);
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);

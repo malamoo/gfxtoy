@@ -73,3 +73,11 @@ void *emalloc(size_t n)
         eprintf("malloc of %u bytes failed:", n);
     return p;
 }
+
+void *erealloc(void *p, size_t n)
+{
+    p = realloc(p, n);
+    if (p == NULL)
+        eprintf("realloc of %u bytes failed:", n);
+    return p;
+}
