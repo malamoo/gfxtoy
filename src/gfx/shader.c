@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <string.h>
 #include <stdlib.h>
-#include <assert.h>
 #include "platform.h"
 #include "shader.h"
 
@@ -47,6 +46,7 @@ GLuint buildprog(void)
     glGetShaderiv(fs, GL_COMPILE_STATUS, &ok);
     if (!ok) {
         pshaderlog(fs);
+        glDeleteShader(vs);
         glDeleteShader(fs);
         return 0;
     }
