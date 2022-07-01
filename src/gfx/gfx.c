@@ -4,7 +4,7 @@
 #include "platform.h"
 #include "shader.h"
 #include "gfx.h"
-#include "math.h"
+#include "gmath.h"
 
 static GLuint prog;
 static GLuint vao;
@@ -42,11 +42,25 @@ void gfxinit(void)
 
 void gfxrender(void)
 {
-    GLfloat red[] = { 1.0f, 0.0f, 0.0f };
+    vec3 red = { 1.0f, 0.0f, 0.0f };
+    GLint loc;
+    tform model;
 
     glClearBufferfv(GL_COLOR, 0, red);
 
     glUseProgram(prog);
 
+    loc = glGetUniformLocation(prog, "model");
+    if (loc == -1)
+        eprintf("can't find uniform");
+    tformrotz(45, model);
+    tformprint(model);
+    glUniformMatrix4fv(loc, 1, GL_FALSE, (const GLfloat *) model);
+
     glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    //    tformid(model);
+    //    glUniformMatrix4fv(loc, 1, GL_FALSE, (const GLfloat *) model);
+    //
+    //    glDrawArrays(GL_TRIANGLES, 0, 3);
 }

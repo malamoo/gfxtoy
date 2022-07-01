@@ -9,7 +9,7 @@ target := $(bindir)/eemoo
 VPATH := $(sort $(dir $(srcs)))
 CPPFLAGS = -MT $@ -MMD -MP -MF $(@:%.o=%.d)
 CFLAGS = -Wall -Werror -std=c99 -Iinclude
-LDLIBS := -lglfw -lGLEW -lGLU -lGL
+LDLIBS := -lglfw -lGLEW -lGLU -lGL -lm
 
 .PHONY: all
 all: $(dirs) $(target)
