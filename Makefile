@@ -8,7 +8,14 @@ target := geosmith
 VPATH := $(sort $(dir $(srcs))) # search in all source directories
 CPPFLAGS = -MT $@ -MMD -MP -MF $(@:%.o=%.d) # generate dependency target files
 CFLAGS = -Wall -Werror -std=c99 -Iinclude
-LDLIBS := -lglfw3 -lopengl32 -lm
+LDLIBS := -lm
+
+# detect platform for linking libs
+ifeq ($(OS),Windows_NT)
+	LDLIBS += -lglfw3 -lopengl32
+else
+	LDLIBS += -lglfw -lGL -ldl
+endif
 
 .PHONY: all
 all: $(bindir)/$(target)
