@@ -1,13 +1,12 @@
-# eemoo
+# Geosmith
 
 ## Dependencies
 
-- GLEW
 - GLFW
 
 ## Supported platforms
 
-- Linux
+- Windows
 
 ## Build
 

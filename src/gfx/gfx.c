@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include "platform.h"
@@ -19,12 +19,10 @@ static hvec pos[] = {
 
 void gfxinit(void)
 {
-    GLenum err;
     GLuint buf;
 
-    err = glewInit();
-    if (GLEW_OK != err)
-        eprintf("GLEW init failed: %s", glewGetErrorString(err));
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+        eprintf("failed to initialize OpenGL context");
 
     glViewport(0, 0, 720, 720);
 
@@ -58,14 +56,8 @@ void gfxrender(void)
     loc = glGetUniformLocation(prog, "model");
     if (loc == -1)
         eprintf("can't find uniform");
-    tformrotz(45, model);
-    tformprint(model);
+    tformrotz(45 * (float) glfwGetTime(), model);
     glUniformMatrix4fv(loc, 1, GL_FALSE, (const GLfloat *) model);
 
     glDrawArrays(GL_TRIANGLES, 0, sizeof(pos));
-
-    //    tformid(model);
-    //    glUniformMatrix4fv(loc, 1, GL_FALSE, (const GLfloat *) model);
-    //
-    //    glDrawArrays(GL_TRIANGLES, 0, 3);
 }

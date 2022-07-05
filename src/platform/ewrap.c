@@ -8,27 +8,6 @@
 
 static char *name = NULL; // program name for messages
 
-void setprogname(char *str)
-{
-    name = estrdup(str);
-}
-
-char *progname(void)
-{
-    return name;
-}
-
-char *estrdup(char *s)
-{
-    char *t;
-
-    t = (char *) malloc(strlen(s) + 1);
-    if (t == NULL)
-        eprintf("estrdup(\"%.20s\") failed:", s);
-    strcpy(t, s);
-    return t;
-}
-
 void eprintf(char *fmt, ...)
 {
     va_list args;
@@ -45,6 +24,27 @@ void eprintf(char *fmt, ...)
         fprintf(stderr, " %s", strerror(errno));
     fprintf(stderr, "\n");
     exit(2);
+}
+
+char *estrdup(char *s)
+{
+    char *t;
+
+    t = (char *) malloc(strlen(s) + 1);
+    if (t == NULL)
+        eprintf("estrdup(\"%.20s\") failed:", s);
+    strcpy(t, s);
+    return t;
+}
+
+void setprogname(char *str)
+{
+    name = estrdup(str);
+}
+
+char *progname(void)
+{
+    return name;
 }
 
 void weprintf(char *fmt, ...)

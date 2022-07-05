@@ -2,7 +2,8 @@
 <project version="4">
   <component name="CidrRootsConfiguration">
     <sourceRoots>
-      <file path="$PROJECT_DIR$/src" />
+      <file path="$PROJECT_DIR$/../monument/include" />
+      <file path="$PROJECT_DIR$/../monument/src" />
     </sourceRoots>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />

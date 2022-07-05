@@ -1,31 +1,33 @@
-builddir := build
+objdir := obj
 bindir := bin
-dirs := $(builddir) $(bindir)
 srcs := $(wildcard src/*.c) $(wildcard src/*/*.c)
-objs := $(patsubst %.c,$(builddir)/%.o,$(notdir $(srcs)))
+objs := $(patsubst %.c,$(objdir)/%.o,$(notdir $(srcs)))
 deps := $(objs:%.o=%.d)
-target := $(bindir)/eemoo
+target := geosmith
 
-VPATH := $(sort $(dir $(srcs)))
-CPPFLAGS = -MT $@ -MMD -MP -MF $(@:%.o=%.d)
+VPATH := $(sort $(dir $(srcs))) # search in all source directories
+CPPFLAGS = -MT $@ -MMD -MP -MF $(@:%.o=%.d) # generate dependency target files
 CFLAGS = -Wall -Werror -std=c99 -Iinclude
-LDLIBS := -lglfw -lGLEW -lGLU -lGL -lm
+LDLIBS := -lglfw3 -lopengl32 -lm
 
 .PHONY: all
-all: $(dirs) $(target)
+all: $(bindir)/$(target)
 
-$(target): $(objs)
-	$(CC) $^ -o $@ $(LDLIBS) 
+$(bindir)/$(target): $(objs) | $(bindir)
+	$(CC) $^ -o $@ $(LDLIBS)
 
-$(builddir)/%.o: %.c
+$(bindir):
+	@mkdir bin
+
+$(objdir)/%.o: %.c | $(objdir)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
-$(dirs):
-	mkdir -p $(bindir) $(builddir)
+$(objdir):
+	@mkdir obj
 
 .PHONY: clean
 clean:
-	$(RM) -r $(bindir) $(builddir)
+	$(RM) -r obj bin
 
 .PHONY: echo_%
 echo_%:

@@ -6,7 +6,7 @@
 
 int main(void)
 {
-    setprogname("eemoo");
+    setprogname("geosmith");
 
     gameplay();
 

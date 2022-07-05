@@ -17,7 +17,7 @@ GLFWwindow *glfwinit()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    glfw = glfwCreateWindow(720, 720, progname(), NULL, NULL);
+    glfw = glfwCreateWindow(720, 720, "Geosmith", NULL, NULL);
     if (glfw == NULL)
         eprintf("window creation failed");
 
@@ -37,7 +37,6 @@ static void errcb(int err, const char *desc)
 
 static void keycb(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    // TODO: fix window closing immediately bug
-    //    if (key == GLFW_KEY_E && action == GLFW_PRESS)
-    //        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
