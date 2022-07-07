@@ -7,7 +7,7 @@ target := geosmith
 
 VPATH := $(sort $(dir $(srcs))) # search in all source directories
 CPPFLAGS = -MT $@ -MMD -MP -MF $(@:%.o=%.d) # generate dependency target files
-CFLAGS = -Wall -Werror -std=c99 -Iinclude
+CFLAGS := -Wall -Werror -std=c99 -Iinclude
 LDLIBS := -lm
 CC := gcc
 
@@ -17,8 +17,8 @@ ifeq ($(OS),Windows_NT)
 	LDLIBS += -Llib/glfw/build/src -lglfw3 -lopengl32 -lgdi32
 	RM := del /q
 else
-	CFLAGS += $(env PKG_CONFIG_PATH=lib/glfw/build/src pkg-config --cflags glfw3)
-	LDLIBS += $(env PKG_CONFIG_PATH=lib/glfw/build/src pkg-config --libs glfw3) -lGL -ldl
+	CFLAGS += $(shell env PKG_CONFIG_PATH=lib/glfw/build/src pkg-config --cflags glfw3)
+	LDLIBS += $(shell env PKG_CONFIG_PATH=lib/glfw/build/src pkg-config --libs glfw3) -lGL -ldl
 	RM := rm -r
 endif
 

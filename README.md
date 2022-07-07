@@ -4,17 +4,18 @@ Simulates physical geography in an interactive voxel playground.
 
 Shape the landscape using erosion, weathering, tectonics, volcanism, climate, and more!
 
-## Dependencies
-
-- OpenGL
-- make
-- CMake
-- git
-
 ## Supported platforms
 
 - MinGW
 - Linux
+
+## Dependencies
+
+- OpenGL
+- [GLFW platform dependencies](https://www.glfw.org/docs/latest/compile_guide.html)
+- make
+- CMake
+- Git
 
 ## Build
 
