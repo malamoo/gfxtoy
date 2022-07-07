@@ -1,4 +1,4 @@
-# Geosmith
+# GeoSmith
 
 Simulates physical geography in an interactive voxel playground.
 

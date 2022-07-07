@@ -8,7 +8,8 @@ target := geosmith
 VPATH := $(sort $(dir $(srcs))) # search in all source directories
 CPPFLAGS = -MT $@ -MMD -MP -MF $(@:%.o=%.d) # generate dependency target files
 CFLAGS := -Wall -Werror -std=c99 -Iinclude -Ilib/glfw/include
-LDLIBS := -lm -Llib/glfw/build/src -lglfw3
+LDFLAGS := -Llib/glfw/build/src
+LDLIBS := -lm -lglfw3
 CC := gcc
 
 # platform-specific configuration
@@ -16,7 +17,7 @@ ifeq ($(OS),Windows_NT)
 	LDLIBS += -lopengl32 -lgdi32
 	RM := del /q
 else
-	LDLIBS += -lGL -ldl
+	LDLIBS += -lGL -ldl -lpthread
 	RM := rm -r
 endif
 
@@ -24,7 +25,7 @@ endif
 all: $(bindir)/$(target)
 
 $(bindir)/$(target): $(objs) | $(bindir)
-	$(CC) $^ -o $@ $(LDLIBS)
+	$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 
 $(bindir):
 	@mkdir bin
