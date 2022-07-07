@@ -7,8 +7,8 @@ Shape the landscape using erosion, weathering, tectonics, volcanism, climate, an
 ## Dependencies
 
 - OpenGL
-- GLFW
 - make
+- CMake
 
 ## Supported platforms
 

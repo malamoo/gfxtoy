@@ -22,7 +22,7 @@ GLuint buildprog(void)
     GLuint vs, fs, prog; // names of shaders and program
     GLint ok;            // if compilation or linking successful
 
-    vs = createshader("src/gfx/shader.vert", GL_VERTEX_SHADER);
+    vs = createshader("../src/gfx/shader.vert", GL_VERTEX_SHADER);
     if (vs == 0) {
         weprintf("can't compile vertex shader");
         return 0;
@@ -36,7 +36,7 @@ GLuint buildprog(void)
         return 0;
     }
 
-    fs = createshader("src/gfx/shader.frag", GL_FRAGMENT_SHADER);
+    fs = createshader("../src/gfx/shader.frag", GL_FRAGMENT_SHADER);
     if (fs == 0) {
         weprintf("can't compile fragment shader");
         return 0;

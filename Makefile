@@ -9,19 +9,24 @@ VPATH := $(sort $(dir $(srcs))) # search in all source directories
 CPPFLAGS = -MT $@ -MMD -MP -MF $(@:%.o=%.d) # generate dependency target files
 CFLAGS = -Wall -Werror -std=c99 -Iinclude
 LDLIBS := -lm
+CC := gcc
 
-# detect platform for linking libs
+# platform-specific configuration
 ifeq ($(OS),Windows_NT)
-	LDLIBS += -lglfw3 -lopengl32
+	CFLAGS += -Ilib/glfw/include
+	LDLIBS += -Llib/glfw/build/src -lglfw3 -lopengl32 -lgdi32
+	RM := del /q
 else
-	LDLIBS += -lglfw -lGL -ldl
+	CFLAGS += $(env PKG_CONFIG_PATH=lib/glfw/build/src pkg-config --cflags glfw3)
+	LDLIBS += $(env PKG_CONFIG_PATH=lib/glfw/build/src pkg-config --libs glfw3) -lGL -ldl
+	RM := rm -r
 endif
 
 .PHONY: all
 all: $(bindir)/$(target)
 
 $(bindir)/$(target): $(objs) | $(bindir)
-	$(CC) $^ -o $@ $(LDLIBS)
+	$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 
 $(bindir):
 	@mkdir bin
@@ -34,7 +39,7 @@ $(objdir):
 
 .PHONY: clean
 clean:
-	$(RM) -r obj bin
+	$(RM) obj bin
 
 .PHONY: echo_%
 echo_%:
