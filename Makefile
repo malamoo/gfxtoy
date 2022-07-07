@@ -26,7 +26,7 @@ endif
 all: $(bindir)/$(target)
 
 $(bindir)/$(target): $(objs) | $(bindir)
-	$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS)
+	$(CC) $^ -o $@ $(LDLIBS)
 
 $(bindir):
 	@mkdir bin
