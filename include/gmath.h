@@ -5,4 +5,5 @@ typedef float tform[16];
 
 void tformid(tform m);
 void tformrotz(float deg, tform m);
+void tformroty(float deg, tform m);
 void tformprint(tform m);

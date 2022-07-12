@@ -64,6 +64,33 @@ void tformrotz(float deg, tform m)
     m[15] = 1;
 }
 
+void tformroty(float deg, tform m)
+{
+    float rad;
+
+    rad = degtorad(deg);
+
+    m[0] = cosf(rad);
+    m[1] = 0;
+    m[2] = -sinf(rad);
+    m[3] = 0;
+
+    m[4] = 0;
+    m[5] = 1;
+    m[6] = 0;
+    m[7] = 0;
+
+    m[8] = sinf(rad);
+    m[9] = 0;
+    m[10] = cosf(rad);
+    m[11] = 0;
+
+    m[12] = 0;
+    m[13] = 0;
+    m[14] = 0;
+    m[15] = 1;
+}
+
 void tformprint(tform m)
 {
     int i;
@@ -72,7 +99,7 @@ void tformprint(tform m)
         printf("% 5.3f", m[i]);
         if ((i % 4) < 3)
             printf(" ");
-        if ((i % 4) >= 3)
+        else
             printf("\n");
     }
     printf("\n");

@@ -1,17 +1,14 @@
 #version 330
 
-layout (location = 0) in vec4 pos;
+layout (location = 0) in vec3 pos;
 
 uniform mat4 model;
-uniform mat4 tmp = mat4(0.707, 0.707, 0.000, 0.000,
-                   -0.707, 0.707, 0.000, 0.000,
-                   0.000, 0.000, 1.000, 0.000,
-                   0.000, 0.000, 0.000, 1.000);
-uniform mat4 tmp2 = mat4(0.0, 1.0, 0.000, 0.000,
-                    -1.0, 0.0, 0.000, 0.000,
-                    0.000, 0.000, 1.000, 0.000,
-                    0.000, 0.000, 0.000, 1.000);
+uniform mat4 model2;
+uniform float t;
+
+out vec4 vcolor;
 
 void main() {
-    gl_Position = model * pos;
+    vcolor = vec4(gl_VertexID % 6 * 0.1 * t, gl_VertexID % 6 * 0.2 * sin(t), gl_VertexID % 6 * 0.3 * t, 1.0);
+    gl_Position = model2 * model * vec4(pos, 1.0);
 }
