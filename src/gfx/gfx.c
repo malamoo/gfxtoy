@@ -7,45 +7,47 @@
 #include "gfx.h"
 #include "gmath.h"
 
-static GLuint prog;
+static GLint unisetmat4fv(GLuint prog, char *name, tform m);
+
+static GLuint mainprog;
 static GLuint vao;
 static vec3 pos[36] = {
-    { -0.25f, -0.25f, -0.25f },
-    { -0.25f, -0.25f, 0.25f },
-    { -0.25f, 0.25f, 0.25f },
-    { 0.25f, 0.25f, -0.25f },
-    { -0.25f, -0.25f, -0.25f },
-    { -0.25f, 0.25f, -0.25f },
-    { 0.25f, -0.25f, 0.25f },
-    { -0.25f, -0.25f, -0.25f },
-    { 0.25f, -0.25f, -0.25f },
-    { 0.25f, 0.25f, -0.25f },
-    { 0.25f, -0.25f, -0.25f },
-    { -0.25f, -0.25f, -0.25f },
-    { -0.25f, -0.25f, -0.25f },
-    { -0.25f, 0.25f, 0.25f },
-    { -0.25f, 0.25f, -0.25f },
-    { 0.25f, -0.25f, 0.25f },
-    { -0.25f, -0.25f, 0.25f },
-    { -0.25f, -0.25f, -0.25f },
-    { -0.25f, 0.25f, 0.25f },
-    { -0.25f, -0.25f, 0.25f },
-    { 0.25f, -0.25f, 0.25f },
-    { 0.25f, 0.25f, 0.25f },
-    { 0.25f, -0.25f, -0.25f },
-    { 0.25f, 0.25f, -0.25f },
-    { 0.25f, -0.25f, -0.25f },
-    { 0.25f, 0.25f, 0.25f },
-    { 0.25f, -0.25f, 0.25f },
-    { 0.25f, 0.25f, 0.25f },
-    { 0.25f, 0.25f, -0.25f },
-    { -0.25f, 0.25f, -0.25f },
-    { 0.25f, 0.25f, 0.25f },
-    { -0.25f, 0.25f, -0.25f },
-    { -0.25f, 0.25f, 0.25f },
-    { 0.25f, 0.25f, 0.25f },
-    { -0.25f, 0.25f, 0.25f },
-    { 0.25f, -0.25f, 0.25f }
+    { -1.0f, -1.0f, -1.0f },
+    { -1.0f, -1.0f, 1.0f },
+    { -1.0f, 1.0f, 1.0f },
+    { 1.0f, 1.0f, -1.0f },
+    { -1.0f, -1.0f, -1.0f },
+    { -1.0f, 1.0f, -1.0f },
+    { 1.0f, -1.0f, 1.0f },
+    { -1.0f, -1.0f, -1.0f },
+    { 1.0f, -1.0f, -1.0f },
+    { 1.0f, 1.0f, -1.0f },
+    { 1.0f, -1.0f, -1.0f },
+    { -1.0f, -1.0f, -1.0f },
+    { -1.0f, -1.0f, -1.0f },
+    { -1.0f, 1.0f, 1.0f },
+    { -1.0f, 1.0f, -1.0f },
+    { 1.0f, -1.0f, 1.0f },
+    { -1.0f, -1.0f, 1.0f },
+    { -1.0f, -1.0f, -1.0f },
+    { -1.0f, 1.0f, 1.0f },
+    { -1.0f, -1.0f, 1.0f },
+    { 1.0f, -1.0f, 1.0f },
+    { 1.0f, 1.0f, 1.0f },
+    { 1.0f, -1.0f, -1.0f },
+    { 1.0f, 1.0f, -1.0f },
+    { 1.0f, -1.0f, -1.0f },
+    { 1.0f, 1.0f, 1.0f },
+    { 1.0f, -1.0f, 1.0f },
+    { 1.0f, 1.0f, 1.0f },
+    { 1.0f, 1.0f, -1.0f },
+    { -1.0f, 1.0f, -1.0f },
+    { 1.0f, 1.0f, 1.0f },
+    { -1.0f, 1.0f, -1.0f },
+    { -1.0f, 1.0f, 1.0f },
+    { 1.0f, 1.0f, 1.0f },
+    { -1.0f, 1.0f, 1.0f },
+    { 1.0f, -1.0f, 1.0f }
 };
 
 void gfxinit(void)
@@ -57,8 +59,8 @@ void gfxinit(void)
 
     glViewport(0, 0, 720, 720);
 
-    prog = buildprog();
-    if (prog == 0)
+    mainprog = buildprog();
+    if (mainprog == 0)
         eprintf("can't create shader program");
 
     glGenVertexArrays(1, &vao);
@@ -71,7 +73,7 @@ void gfxinit(void)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), 0);
     glEnableVertexAttribArray(0);
 
-    //    glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -79,33 +81,37 @@ void gfxinit(void)
 
 void gfxrender(void)
 {
-    GLint loc;
-    tform model;
-    tform model2;
-    float t;
-
-    t = (float)glfwGetTime();
+    tform model, camera, proj;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glUseProgram(prog);
+    glUseProgram(mainprog);
 
-    loc = glGetUniformLocation(prog, "model");
-    if (loc == -1)
-        eprintf("can't find uniform");
-    tformroty(45 * (float) glfwGetTime(), model);
-    glUniformMatrix4fv(loc, 1, GL_FALSE, (const GLfloat *) model);
+    tfroty((float) glfwGetTime() * 45, model);
+    tftranz(-10.0f, model);
+    unisetmat4fv(mainprog, "model", model);
 
-    loc = glGetUniformLocation(prog, "model2");
-    if (loc == -1)
-        eprintf("can't find uniform");
-    tformrotz(45 * (float) glfwGetTime(), model2);
-    glUniformMatrix4fv(loc, 1, GL_FALSE, (const GLfloat *) model2);
+    tfcam((vec3){ 0.0f, 5.0f + (cosf((float) glfwGetTime()) + 1.0f) * 2.0f / 2.0f, 0.0f },
+          (vec3){ 0.0f, -0.5f, -1.0f },
+          (vec3) {0.0f, 1.0f, 0.0f},
+          camera);
+    unisetmat4fv(mainprog, "camera", camera);
 
-    loc = glGetUniformLocation(prog, "t");
-    if (loc == -1)
-        eprintf("can't find uniform");
-    glUniform1f(loc, cosf(t) + 1.5);
+    tfpersp(45, 720 / 720, 0.1f, 100.0f, proj);
+    unisetmat4fv(mainprog, "proj", proj);
 
     glDrawArrays(GL_TRIANGLES, 0, sizeof(pos));
+}
+
+static GLint unisetmat4fv(GLuint prog, char *name, tform m)
+{
+    GLint loc;
+
+    loc = glGetUniformLocation(prog, name);
+    if (loc == -1) {
+        eprintf("can't find uniform \"%s\"", name);
+        return loc;
+    }
+    glUniformMatrix4fv(loc, 1, GL_FALSE, (const GLfloat *) m);
+    return loc;
 }
