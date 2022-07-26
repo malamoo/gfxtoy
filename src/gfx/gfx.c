@@ -87,11 +87,14 @@ void gfxrender(void)
 
     glUseProgram(mainprog);
 
-    tfroty((float) glfwGetTime() * 45, model);
-    tftranz(-10.0f, model);
+    tfid(model);
+    tftran(model, (vec3){ 0.0f, 0.0f, -10.0f }, model);
+    tfroty(model, (float) glfwGetTime() * 180, model);
+    tfrotx(model, (float) glfwGetTime() * 180, model);
+    tfscale(model, (cosf((float) glfwGetTime()) + 1.0f) / 2.0f, model);
     unisetmat4fv(mainprog, "model", model);
 
-    tfcam((vec3){ 0.0f, 5.0f + (cosf((float) glfwGetTime()) + 1.0f) * 2.0f / 2.0f, 0.0f },
+    tfcam((vec3){ 0.0f, 5.0f + (cosf((float) glfwGetTime()) + 1.0f) / 2.0f, 0.0f },
           (vec3){ 0.0f, -0.5f, -1.0f },
           (vec3) {0.0f, 1.0f, 0.0f},
           camera);

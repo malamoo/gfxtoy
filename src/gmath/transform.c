@@ -37,58 +37,58 @@ void tfid(tform out)
     out[3][3] = 1;
 }
 
-void tfrotz(float deg, tform out)
+void tfrotx(tform t, float deg, tform out)
 {
     float rad;
+    tform rot;
 
     rad = degtorad(deg);
 
-    out[0][0] = cosf(rad);
-    out[0][1] = sinf(rad);
-    out[0][2] = 0;
-    out[0][3] = 0;
-
-    out[1][0] = -sinf(rad);
-    out[1][1] = cosf(rad);
-    out[1][2] = 0;
-    out[1][3] = 0;
-
-    out[2][0] = 0;
-    out[2][1] = 0;
-    out[2][2] = 1;
-    out[2][3] = 0;
-
-    out[3][0] = 0;
-    out[3][1] = 0;
-    out[3][2] = 0;
-    out[3][3] = 1;
+    tfid(rot);
+    rot[1][1] = cosf(rad);
+    rot[1][2] = sinf(rad);
+    rot[2][1] = -sinf(rad);
+    rot[2][2] = cosf(rad);
+    tfmul(t, rot, out);
 }
 
-void tfroty(float deg, tform out)
+void tfrotz(tform t, float deg, tform out)
 {
     float rad;
+    tform rot;
 
     rad = degtorad(deg);
 
-    out[0][0] = cosf(rad);
-    out[0][1] = 0;
-    out[0][2] = -sinf(rad);
-    out[0][3] = 0;
+    tfid(rot);
+    rot[0][0] = cosf(rad);
+    rot[0][1] = sinf(rad);
+    rot[1][0] = -sinf(rad);
+    rot[1][1] = cosf(rad);
+    tfmul(t, rot, out);
+}
 
-    out[1][0] = 0;
-    out[1][1] = 1;
-    out[1][2] = 0;
-    out[1][3] = 0;
+void tfroty(tform t, float deg, tform out)
+{
+    float rad;
+    tform rot;
 
-    out[2][0] = sinf(rad);
-    out[2][1] = 0;
-    out[2][2] = cosf(rad);
-    out[2][3] = 0;
+    rad = degtorad(deg);
 
-    out[3][0] = 0;
-    out[3][1] = 0;
-    out[3][2] = 0;
-    out[3][3] = 1;
+    tfid(rot);
+    rot[0][0] = cosf(rad);
+    rot[0][2] = -sinf(rad);
+    rot[2][0] = sinf(rad);
+    rot[2][2] = cosf(rad);
+    tfmul(t, rot, out);
+}
+
+void tfscale(tform t, float s, tform out)
+{
+    tform scale;
+
+    tfid(scale);
+    scale[0][0] = scale[1][1] = scale[2][2] = s;
+    tfmul(t, scale, out);
 }
 
 void tfcam(vec3 e, vec3 g, vec3 t, tform out)
@@ -158,27 +158,22 @@ void tfframeinv(tform frame, tform out)
     a[3][2] = 0;
     a[3][3] = 1;
 
-    b[0][0] = 1;
-    b[0][1] = 0;
-    b[0][2] = 0;
-    b[0][3] = 0;
-
-    b[1][0] = 0;
-    b[1][1] = 1;
-    b[1][2] = 0;
-    b[1][3] = 0;
-
-    b[2][0] = 0;
-    b[2][1] = 0;
-    b[2][2] = 1;
-    b[2][3] = 0;
-
-    b[3][0] = -e[0];
-    b[3][1] = -e[1];
-    b[3][2] = -e[2];
-    b[3][3] = 1;
+    tfid(b);
+    vec3neg(e, e);
+    tftran(b, e, b);
 
     tfmul(a, b, out);
+}
+
+void tftran(tform t, vec3 v, tform out)
+{
+    tform tran;
+
+    tfid(tran);
+    tran[3][0] = v[0];
+    tran[3][1] = v[1];
+    tran[3][2] = v[2];
+    tfmul(t, tran, out);
 }
 
 void tfmul(tform a, tform b, tform out)
