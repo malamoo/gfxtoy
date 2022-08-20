@@ -1,8 +1,6 @@
-# GeoSmith
+# GFXToy
 
-Simulates physical geography in an interactive voxel playground.
-
-Shape the landscape using erosion, weathering, tectonics, volcanism, climate, and more!
+Toy program used for learning how to implement low-level graphics concepts.
 
 ## Supported platforms
 

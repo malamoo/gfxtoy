@@ -1,2 +1,2 @@
 void gfxinit(void);
-void gfxrender(void);
+void gfxrender(GLFWwindow *glfw);

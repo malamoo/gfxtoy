@@ -50,6 +50,27 @@ static vec3 pos[36] = {
     { 1.0f, -1.0f, 1.0f }
 };
 
+typedef struct Cursor {
+    float x, y;
+} Cursor;
+
+static Cursor cursor = {
+    .x = 0.0f,
+    .y = 0.0f
+};
+
+static float pitch, yaw;
+static vec3 g = { 0.0f, 0.0f, -1.0f };
+static float dt;
+static float tlast;
+static tform model;
+
+static float PI = 3.14159265358979323846f;
+static float degtorad(float deg)
+{
+    return (deg * PI) / 180.0f;
+}
+
 void gfxinit(void)
 {
     GLuint buf;
@@ -75,28 +96,41 @@ void gfxinit(void)
 
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+
+    tfid(model);
 }
 
 // TODO: gfxDelete
 
-void gfxrender(void)
+void gfxrender(GLFWwindow *glfw)
 {
-    tform model, camera, proj;
+    tform camera, proj;
+    float t;
+    double x, y, dx, dy;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(mainprog);
 
-    tfid(model);
-    tftran(model, (vec3){ 0.0f, 0.0f, -10.0f }, model);
-    tfroty(model, (float) glfwGetTime() * 180, model);
-    tfrotx(model, (float) glfwGetTime() * 180, model);
-    tfscale(model, (cosf((float) glfwGetTime()) + 1.0f) / 2.0f, model);
+    t = (float) glfwGetTime();
+    dt = t - tlast;
+    tlast = t;
+    glfwGetCursorPos(glfw, &x, &y);
+    dx = cursor.x - x, dy = cursor.y - y;
+    cursor.x = x, cursor.y = y;
+    pitch += degtorad(0.1f * dy);
+    yaw += degtorad(0.1f * dx);
+
+    tfroty(model, dt * 180, model);
     unisetmat4fv(mainprog, "model", model);
 
-    tfcam((vec3){ 0.0f, 5.0f + (cosf((float) glfwGetTime()) + 1.0f) / 2.0f, 0.0f },
-          (vec3){ 0.0f, -0.5f, -1.0f },
-          (vec3) {0.0f, 1.0f, 0.0f},
+    g[0] = -sinf(yaw);
+    g[1] = sinf(pitch);
+    g[2] = -cosf(pitch) - cosf(yaw);
+
+    tfcam((vec3){ 0.0f, 5.0f, 10.0f },
+          g,
+          (vec3){ 0.0f, 1.0f, 0.0f },
           camera);
     unisetmat4fv(mainprog, "camera", camera);
 

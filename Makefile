@@ -3,7 +3,7 @@ bindir := bin
 srcs := $(wildcard src/*.c) $(wildcard src/*/*.c)
 objs := $(patsubst %.c,$(objdir)/%.o,$(notdir $(srcs)))
 deps := $(objs:%.o=%.d)
-target := geosmith
+target := gfxtoy
 
 VPATH := $(sort $(dir $(srcs))) # search in all source directories
 CPPFLAGS = -MT $@ -MMD -MP -MF $(@:%.o=%.d) # generate dependency target files

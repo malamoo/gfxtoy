@@ -21,3 +21,4 @@ void vec3unit(vec3 v, vec3 out);
 void vec3neg(vec3 v, vec3 out);
 float vec3norm(vec3 v);
 void vec3cross(vec3 a, vec3 b, vec3 out);
+

@@ -11,7 +11,7 @@ void gameplay(void)
     glfw = glfwinit();
     gfxinit();
     while (!glfwWindowShouldClose(glfw)) {
-        gfxrender();
+        gfxrender(glfw);
         glfwSwapBuffers(glfw);
         glfwPollEvents();
     }
